@@ -32,7 +32,7 @@
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 217.2 32.6% 17.5%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
@@ -55,12 +55,22 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  /* Force Tailwind utilities to win over Geist inline styles */
+  .text-foreground {
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .bg-background {
+    background-color: hsl(var(--background)) !important;
+  }
 }
 
 @layer base {
   * {
     border-color: hsl(var(--border));
   }
+
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
@@ -74,20 +84,24 @@
     backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
+
   .dark .glass {
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
+
   .gradient-text {
     background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
   }
+
   .gradient-bg {
     background: linear-gradient(to bottom right, #eff6ff, #e0e7ff, #faf5ff);
   }
+
   .dark .gradient-bg {
     background: linear-gradient(to bottom right, #1e293b, #334155, #475569);
   }

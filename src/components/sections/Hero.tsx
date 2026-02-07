@@ -129,8 +129,8 @@ export function Hero() {
           className="text-xl sm:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed"
           variants={itemVariants}
         >
-          I think in edge cases, test scenarios, and failure points. 
-          <span className="text-primary font-semibold"> Risk-based testing</span> isn't just a methodology—it's how I prevent bugs before they reach production. 
+          I think in edge cases, test scenarios, and failure points.
+          <span className="text-primary font-semibold"> Risk-based testing</span> isn't just a methodology—it's how I prevent bugs before they reach production.
           From boundary conditions to user empathy, I ensure quality at every step of the development lifecycle.
         </motion.p>
 
@@ -141,7 +141,7 @@ export function Hero() {
         >
           {[
             "🔍 Edge Case Hunter",
-            "🛡️ Risk Mitigator", 
+            "🛡️ Risk Mitigator",
             "🐛 Bug Prevention",
             "👥 User Advocate",
             "⚡ Performance Guardian",
@@ -153,9 +153,10 @@ export function Hero() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.5 + index * 0.1 }}
-              whileHover={{ scale: 1.1, backgroundColor: "hsl(var(--primary))", color: "hsl(var(--primary-foreground))" }}
-            >
-              {pill}
+              whileHover={{ scale: 1.1 }}
+            ><span className="hover:bg-primary hover:text-primary-foreground">
+                {pill}
+              </span>
             </motion.span>
           ))}
         </motion.div>
