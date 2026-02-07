@@ -44,7 +44,7 @@ export function Hero() {
         {floatingIcons.map(({ icon: Icon, delay, x, y }, index) => (
           <motion.div
             key={index}
-            className="absolute opacity-20"
+            className="absolute opacity-20 dark:opacity-30 dark:drop-shadow-[0_0_20px_rgba(59,130,246,0.15)]"
             initial={{ x: 0, y: 0, rotate: 0 }}
             animate={{
               x: [x, x + 20, x],
@@ -153,7 +153,7 @@ export function Hero() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.5 + index * 0.1 }}
-              whileHover={{ scale: 1.1, backgroundColor: "hsl(var(--primary))" }}
+              whileHover={{ scale: 1.1, backgroundColor: "hsl(var(--primary))", color: "hsl(var(--primary-foreground))" }}
             >
               {pill}
             </motion.span>

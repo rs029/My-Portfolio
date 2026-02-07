@@ -46,7 +46,7 @@ const skillsData = {
       description: "Finding bugs through creative test scenarios",
       usage: "Used for discovering edge cases and usability issues",
       icon: Search,
-      color: "text-blue-500"
+      color: "text-blue-500 dark:text-blue-400"
     },
     { 
       name: "User Acceptance Testing", 
@@ -54,7 +54,7 @@ const skillsData = {
       description: "Validating features from end-user perspective",
       usage: "Critical for feature sign-off and release readiness",
       icon: Users,
-      color: "text-green-500"
+      color: "text-green-500 dark:text-green-400"
     },
     { 
       name: "Regression Testing", 
@@ -62,7 +62,7 @@ const skillsData = {
       description: "Ensuring new changes don't break existing functionality",
       usage: "Comprehensive regression suite for every release",
       icon: Shield,
-      color: "text-purple-500"
+      color: "text-purple-500 dark:text-purple-400"
     },
     { 
       name: "Usability Testing", 
@@ -70,7 +70,7 @@ const skillsData = {
       description: "Evaluating user experience and interface design",
       usage: "Identifying UX friction points and accessibility issues",
       icon: Eye,
-      color: "text-orange-500"
+      color: "text-orange-500 dark:text-orange-400"
     },
   ],
   automation: [
@@ -80,7 +80,7 @@ const skillsData = {
       description: "Modern end-to-end testing framework",
       usage: "Cross-browser regression testing in CI/CD pipeline",
       icon: Play,
-      color: "text-blue-600"
+      color: "text-blue-600 dark:text-blue-500"
     },
     { 
       name: "Cypress", 
@@ -88,7 +88,7 @@ const skillsData = {
       description: "JavaScript-based end-to-end testing",
       usage: "Fast component testing and API integration testing",
       icon: Terminal,
-      color: "text-green-600"
+      color: "text-green-600 dark:text-green-500"
     },
     { 
       name: "Selenium WebDriver", 
@@ -96,7 +96,7 @@ const skillsData = {
       description: "Legacy browser automation framework",
       usage: "Maintaining existing test suites for enterprise clients",
       icon: Globe,
-      color: "text-purple-600"
+      color: "text-purple-600 dark:text-purple-500"
     },
     { 
       name: "Jest & React Testing Library", 
@@ -104,7 +104,7 @@ const skillsData = {
       description: "Unit and integration testing for React apps",
       usage: "Component testing with focus on user behavior",
       icon: Cpu,
-      color: "text-orange-600"
+      color: "text-orange-600 dark:text-orange-500"
     },
   ],
   performance: [
@@ -114,7 +114,7 @@ const skillsData = {
       description: "Simulating user traffic and server load",
       usage: "Identifying bottlenecks before production deployment",
       icon: Zap,
-      color: "text-yellow-500"
+      color: "text-yellow-500 dark:text-yellow-400"
     },
     { 
       name: "Performance Monitoring", 
@@ -122,7 +122,7 @@ const skillsData = {
       description: "Real-time performance metrics and alerts",
       usage: "Continuous monitoring of Core Web Vitals and API response times",
       icon: Activity,
-      color: "text-red-500"
+      color: "text-red-500 dark:text-red-400"
     },
     { 
       name: "Memory Leak Detection", 
@@ -130,7 +130,7 @@ const skillsData = {
       description: "Identifying and preventing memory issues",
       usage: "Critical for long-running applications and mobile apps",
       icon: AlertTriangle,
-      color: "text-indigo-500"
+      color: "text-indigo-500 dark:text-indigo-400"
     },
   ],
   api: [
@@ -140,7 +140,7 @@ const skillsData = {
       description: "Comprehensive API validation and testing",
       usage: "Automated API testing with Postman and custom scripts",
       icon: Globe,
-      color: "text-blue-500"
+      color: "text-blue-500 dark:text-blue-400"
     },
     { 
       name: "GraphQL Testing", 
@@ -148,7 +148,7 @@ const skillsData = {
       description: "Testing GraphQL queries and mutations",
       usage: "Validating schema compliance and performance",
       icon: Terminal,
-      color: "text-pink-500"
+      color: "text-pink-500 dark:text-pink-400"
     },
     { 
       name: "API Security Testing", 
@@ -156,7 +156,7 @@ const skillsData = {
       description: "Identifying API vulnerabilities and security gaps",
       usage: "OWASP security testing and authentication validation",
       icon: Lock,
-      color: "text-red-500"
+      color: "text-red-500 dark:text-red-400"
     },
   ],
   security: [
@@ -166,7 +166,7 @@ const skillsData = {
       description: "Security testing based on OWASP standards",
       usage: "Identifying common web application vulnerabilities",
       icon: Lock,
-      color: "text-red-600"
+      color: "text-red-600 dark:text-red-500"
     },
     { 
       name: "Penetration Testing", 
@@ -174,7 +174,7 @@ const skillsData = {
       description: "Ethical hacking to find security flaws",
       usage: "Simulated attacks to test system defenses",
       icon: Shield,
-      color: "text-orange-600"
+      color: "text-orange-600 dark:text-orange-500"
     },
     { 
       name: "Authentication Testing", 
@@ -182,7 +182,7 @@ const skillsData = {
       description: "Testing user authentication and authorization",
       usage: "Validating JWT, OAuth, and session management",
       icon: Key,
-      color: "text-green-600"
+      color: "text-green-600 dark:text-green-500"
     },
   ],
   tools: [
@@ -192,7 +192,7 @@ const skillsData = {
       description: "Test case management and bug tracking",
       usage: "Comprehensive test planning and defect lifecycle management",
       icon: CheckCircle,
-      color: "text-blue-500"
+      color: "text-blue-500 dark:text-blue-400"
     },
     { 
       name: "TestRail", 
@@ -200,7 +200,7 @@ const skillsData = {
       description: "Test management and reporting",
       usage: "Detailed test execution reports and metrics",
       icon: FileText,
-      color: "text-purple-500"
+      color: "text-purple-500 dark:text-purple-400"
     },
     { 
       name: "GitHub Actions", 
@@ -216,7 +216,7 @@ const skillsData = {
       description: "Containerized testing environments",
       usage: "Consistent testing environments across teams",
       icon: Package,
-      color: "text-blue-600"
+      color: "text-blue-600 dark:text-blue-500"
     },
   ],
 }
@@ -239,7 +239,7 @@ const SkillChip = ({ skill, index }: { skill: any, index: number }) => {
             }}
             className="inline-block"
           >
-            <Card className="cursor-pointer border-2 border-border hover:border-primary transition-all duration-300">
+            <Card className="cursor-pointer border-2 border-border hover:border-primary hover:shadow-lg transition-all duration-300">
               <CardContent className="p-4">
                 <div className="flex items-center space-x-3">
                   <div className={`w-10 h-10 rounded-lg bg-muted flex items-center justify-center`}>

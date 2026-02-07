@@ -124,11 +124,11 @@ export function About() {
               whileHover={{ 
                 scale: 1.02, 
                 y: -5,
-                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+                boxShadow: "0 20px 25px -5px hsl(var(--foreground) / 0.1), 0 10px 10px -5px hsl(var(--foreground) / 0.04)"
               }}
               transition={{ type: "spring" as const, stiffness: 300, damping: 20 }}
             >
-              <Card className={`h-full border-2 ${card.borderColor} ${card.bgColor} hover:shadow-lg transition-all duration-300`}>
+              <Card className={`h-full border-2 ${card.borderColor} ${card.bgColor} hover:shadow-xl hover:border-primary/50 transition-all duration-300`}>
                 <CardHeader className="pb-4">
                   <motion.div
                     className={`w-12 h-12 rounded-lg ${card.bgColor} flex items-center justify-center mb-4`}
