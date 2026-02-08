@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Moon, Sun, Menu, X, Shield, Bug, CheckCircle } from "lucide-react"
+import { Moon, Sun, Menu, X, Shield, Bug, CheckCircle, BugOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useTheme } from "@/hooks/use-theme"
 
@@ -51,11 +51,15 @@ export function Navbar() {
             whileHover={{ scale: 1.05 }}
           >
             <div className="flex items-center space-x-1">
-              <Shield className="h-8 w-8 text-primary" />
-              <Bug className="h-6 w-6 text-destructive" />
+              {/* <Shield className="h-8 w-8 text-primary" />
+              <Bug className="h-6 w-6 text-destructive" /> */}
+              <BugOff 
+                className="h-6 w-6" 
+                style={{ stroke: 'hsl(var(--destructive))' }}
+              />
+              <span className="text-xl font-bold gradient-text">QA Portfolio</span>
               <CheckCircle className="h-6 w-6 text-green-500" />
             </div>
-            <span className="text-xl font-bold gradient-text">QA Portfolio</span>
           </motion.div>
 
           {/* Desktop Navigation */}
