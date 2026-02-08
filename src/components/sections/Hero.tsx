@@ -108,8 +108,8 @@ export function Hero() {
           variants={itemVariants}
           whileHover={{ scale: 1.05 }}
         >
-          <Shield className="h-5 w-5 text-primary" />
-          <span className="text-primary font-semibold">Quality Engineering Expert</span>
+          {/* <Shield className="h-5 w-5 text-primary" />
+          <span className="text-primary font-semibold">Quality Engineering Expert</span> */}
         </motion.div>
 
         {/* Main Headline */}
