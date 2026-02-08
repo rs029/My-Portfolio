@@ -195,9 +195,9 @@ export function Hero() {
           variants={itemVariants}
         >
           {[
-            { number: "500+", label: "Test Cases" },
-            { number: "50+", label: "Bugs Found" },
-            { number: "10+", label: "Projects" },
+            { number: "5000+", label: "Test Cases" },
+            { number: "1000+", label: "Bugs Found" },
+            { number: "5+", label: "Projects" },
             { number: "99%", label: "Coverage" },
           ].map((stat, index) => (
             <motion.div
