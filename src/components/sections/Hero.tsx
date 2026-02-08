@@ -149,14 +149,13 @@ export function Hero() {
           ].map((pill, index) => (
             <motion.span
               key={pill}
-              className="bg-secondary/50 backdrop-blur-sm border border-border rounded-full px-4 py-2 text-sm font-medium"
+              className="bg-secondary/50 backdrop-blur-sm border border-border rounded-full px-4 py-2 text-sm font-medium cursor-pointer transition-all duration-300 hover:bg-primary hover:text-primary-foreground"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.5 + index * 0.1 }}
               whileHover={{ scale: 1.1 }}
-            ><span className="hover:bg-primary hover:text-primary-foreground">
-                {pill}
-              </span>
+            >
+              {pill}
             </motion.span>
           ))}
         </motion.div>

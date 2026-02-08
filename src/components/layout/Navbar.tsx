@@ -38,7 +38,7 @@ export function Navbar() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
+        scrolled || isOpen
           ? "glass border-border"
           : "bg-transparent"
       }`}
@@ -116,6 +116,18 @@ export function Navbar() {
           </div>
         </div>
 
+        {/* Mobile Backdrop Overlay */}
+        {isOpen && (
+          <motion.div
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden z-40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setIsOpen(false)}
+          />
+        )}
+
         {/* Mobile Navigation */}
         <motion.div
           className="md:hidden"
@@ -127,7 +139,7 @@ export function Navbar() {
           }}
           transition={{ duration: 0.3 }}
         >
-          <div className="py-4 space-y-2">
+          <div className="py-4 space-y-2 glass rounded-lg mt-2 border border-border">
             {navItems.map((item) => (
               <a
                 key={item.label}
