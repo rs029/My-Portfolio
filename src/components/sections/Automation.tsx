@@ -26,50 +26,153 @@ import {
 const codeSnippets = {
   playwright: [
     {
-      title: "Basic Page Navigation",
-      description: "Navigate to a page and verify title",
-      code: `import { test, expect } from '@playwright/test';
+      title: "Login Page Positive Test Case",
+      description: "Navigate to page & login to dashboard",
+      code: `import { Given, When, Then } from '@cucumber/cucumber';
+import { expect } from '@playwright/test';
+import { loginPage } from '../support/world';
+import { TestData } from '../../utils/TestData';
+import { setDefaultTimeout } from '@cucumber/cucumber';
 
-test('basic navigation', async ({ page }) => {
-  // Navigate to the application
-  await page.goto('https://example.com');
+Given('the user is on the login page', async function () {
+  // Set timeout for this step (60 seconds)
   
-  // Verify page title
-  await expect(page).toHaveTitle(/Example Page/);
+  setDefaultTimeout(60 * 1000);
   
-  // Check if main element is visible
-  const mainElement = page.locator('main');
-  await expect(mainElement).toBeVisible();
+  await loginPage.navigate();
+  
+  // Wait a bit for URL to update
+  await page.waitForTimeout(1000);
+  
+  const url = loginPage.getUrl();
+  expect(url).toContain('login');
+});
+
+When('the user enters the test email {string}', async (email: string) => {
+  await loginPage.usernameInput().fill(email);
+});
+
+When('enters the test password {string}', async (password: string) => {
+  await loginPage.passwordInput().fill(password);
+});
+
+When('enters the store code {string}', async (storeCode: string) => {
+  const input = await loginPage.storeCodeInput();
+  await input.fill(storeCode)
+});
+
+Then('the user should be redirected to the dashboard', async () => {
+  await page.waitForURL(/.*home|.*dashboard/i, { timeout: 10000 }).catch(() => {});
+  const url = page.url();
+  expect(url).toMatch(/.*home|.*dashboard/i);
+  
+  // Verify we're actually on dashboard
+  const isOnDashboard = await homePage.isOnDashboard();
+  expect(isOnDashboard).toBeTruthy();
 });`,
       language: "typescript",
       framework: "Playwright",
-      difficulty: "Beginner",
-      features: ["Navigation", "Assertions", "Locators"]
+      difficulty: "Advanced",
+      features: ["Dynamic test inputs", "URL & state validation", "Configurable timeouts", "Gherkin"]
     },
     {
-      title: "Form Interaction Testing",
-      description: "Fill and submit a form with validation",
-      code: `import { test, expect } from '@playwright/test';
+      title: "Page Verification Testing",
+      description: "Open a menu & verify it loads without an error",
+      code: `import { Given, When, Then } from '@cucumber/cucumber';
+import { expect } from '@playwright/test';
+import { page, customerPage, context } from '../support/world';
+import { CustomerPage } from '../../pages/CustomerPage';
+import { setDefaultTimeout } from '@cucumber/cucumber';
+setDefaultTimeout(60 * 1000); // Set default timeout for all steps to 60 seconds
 
-test('form submission', async ({ page }) => {
-  await page.goto('/contact');
+// Store the original page and track the current active page
+// These will be reset automatically when ensurePageInitialized() detects a closed page
+let originalPage: any;
+let currentActivePage: any;
+
+function ensurePageInitialized() {
+  if (!page) {
+    throw new Error('Page is not initialized. Make sure hooks.ts Before hook runs first.');
+  }
   
-  // Fill form fields
-  await page.fill('#name', 'John Doe');
-  await page.fill('#email', 'john@example.com');
-  await page.fill('#message', 'Test message');
+  // Check if we need to reset page tracking
+  let needsReset = false;
   
-  // Submit form
-  await page.click('[type="submit"]');
+  if (!originalPage || !currentActivePage) {
+    // First time initialization
+    needsReset = true;
+  } else {
+    // Check if stored pages are closed (from previous scenario)
+    try {
+      // Try to access a property that will throw if page is closed
+      const _ = originalPage.url();
+      // If we get here, page is still open, but check if it's the same instance
+      if (originalPage !== page) {
+        // Page instance changed (new scenario), reset
+        needsReset = true;
+      }
+    } catch (error) {
+      // Page is closed, reset to new page
+      needsReset = true;
+    }
+  }
   
-  // Verify success message
-  await expect(page.locator('.success-message'))
-    .toContainText('Thank you for your message');
-});`,
+  if (needsReset) {
+    originalPage = page;
+    currentActivePage = page;
+    (customerPage as any).page = page;
+    console.log('Page tracking reset - using fresh page instance from world.ts');
+  }
+}
+
+/**
+ * Step: When the user clicks on "Add New Customer"
+ */
+When('the user clicks on {string}', async (buttonText: string) => {
+  ensurePageInitialized();
+  if (buttonText === 'Add New Customer') {
+    await customerPage.clickAddNewCustomer();
+  } else {
+    // Generic button click
+    const button = await customerPage.menuLocator(buttonText);
+    await button.waitFor({ state: 'visible', timeout: 10000 });
+    await button.click();
+    await currentActivePage.waitForTimeout(1000);
+    await customerPage.handlePopups();
+  }
+});
+
+/**
+ * Step: Then the user should be redirected to the Add New Customer Screen
+ */
+Then('the user should be redirected to the Add New Customer Screen', async () => {
+  ensurePageInitialized();
+  await currentActivePage.waitForTimeout(2000); // Wait for navigation
+  await customerPage.handlePopups();
+});
+
+/**
+ * Step: And clicks on "{Menu}" menu
+ */
+When('clicks on {string} menu', async (menuName: string) => {
+  await customerPage.clickMenu(menuName);
+});
+
+When('clicks on {string}', async (itemName: string) => {
+  // Get the current page count and URL before clicking
+  const pagesBefore = context.pages().length;
+  const currentPageUrl = currentActivePage.url();
+  
+  // Click the menu item (this should open a new tab)
+  await customerPage.clickMenuItem(itemName);
+});
+
+/* HERE: Haven't wrote the code for Helper function to verify the new tab */
+`,
       language: "typescript",
       framework: "Playwright",
-      difficulty: "Intermediate",
-      features: ["Form Fill", "Click Actions", "Text Validation"]
+      difficulty: "Advanced",
+      features: ["Form Global timeout configuration (Cucumber hooks)", "Multi-tab handling using Playwright context", "Reusable Page Object architecture", "Defensive error handling for closed pages"]
     },
     {
       title: "API Testing with Playwright",
@@ -100,32 +203,207 @@ test('API response validation', async ({ request }) => {
   ],
   cypress: [
     {
-      title: "Element Interaction",
-      description: "Click elements and verify changes",
-      code: `describe('Button Interactions', () => {
-  beforeEach(() => {
-    cy.visit('/buttons');
-  });
+      title: "Form Submission after Login",
+      description: "Checking positive and negative login test cases & form submission with the details",
+      code: `describe("Neem_Tree_Inital_Testing", () => {
 
-  it('should toggle button state', () => {
-    // Find button and click
-    cy.get('[data-testid="toggle-btn"]')
-      .should('be.visible')
-      .and('not.be.disabled');
-    
-    // Click button
-    cy.get('[data-testid="toggle-btn"]').click();
-    
-    // Verify state change
-    cy.get('[data-testid="toggle-btn"]')
-      .should('have.class', 'active')
-      .and('contain', 'Active');
-  });
-});`,
+    it("Login_Page_Negative_Test", () => {
+
+        cy.visit("URL/Account/login")
+        cy.get("#email").focus().type("admin1")
+        cy.get('#password').focus().type('admin12442')
+        cy.get('#submit').click()
+        // cy.url().should('eq', 'URL/Home/Dashboard')
+        cy.get('.myalert').should('be.visible')
+
+    })
+
+    it("Login_Page_Positive_Test", () => {
+
+        cy.visit("URL/Account/login")
+        cy.get("#email").focus().type("admin")
+        cy.get('#password').focus().type('admin1')
+        cy.get('#submit').click()
+        cy.url().should('eq', 'URL/Home/Dashboard')
+
+        // After successful login - let's get inside the project section
+        
+        cy.get('#Project').click({waitForAnimations: false})
+        // cy.wait(5000)
+        // cy.url().should('eq', 'URL/Project/Index')
+        cy.visit('URL/Project/Index')
+        
+        // Add new Project
+
+        cy.get('#AddnewProject').click({waitForAnimations: false})
+        cy.url().should('eq', 'URL/Project/Details')
+
+        // Make a new Project
+        const currentTime = new Date().toLocaleTimeString()
+
+        cy.get('#projectName').focus().type(currentTime)
+        cy.get('#FromDt').focus().type('2023-12-25')
+        cy.get('#ToDt').focus().type('2023-12-31')
+        // cy.visit('https://www.insider.com/sc/on-running-is-the-sportswear-brand-rethinking-sustainability')
+        // cy.get('img[src="https://media-s3-us-east-1.ceros.com/business-insi…4141/outline.png?imageOpt=1&fit=bounds&width=1080"]').trigger('mousedown', {which: 1})
+        // cy.trigger('mousemove').visit('URL/Project/Details')
+        // cy.get('#dropContainer').trigger('mouseup', {force: true})
+        cy.get('#submitProject').click()
+        // cy.visit('URL/Project/Details?id=198')
+
+
+        // creating some schedule
+
+        cy.get('#SheduleTab').click()
+
+        cy.get('#sDate').focus().type('2024-01-01')
+        cy.get('#sDetails').focus().type('In Room')
+        cy.get('#sRemarks').focus().type('Getting Focused')
+
+        let enteredDate, enteredDetails, enteredRemarks;
+        cy.get('#sDate').invoke('val').then((val) => {
+            enteredDate = val
+        })
+        cy.get('#sDetails').invoke('val').then((val) => {
+            enteredDetails = val
+        })
+        cy.get('#sRemarks').invoke('val').then((val) => {
+            enteredRemarks = val
+        })
+
+        cy.get('#addShedule').click()
+
+
+        // Checking value in table below
+
+        cy.get('table tbody tr').each(($row, index) => {
+            if(index === 0){
+                cy.wrap($row)
+                .find('td')
+                .should('have.length', 6)
+                .eq(0)
+                .should('contain.text', 'Day 1')
+                cy.wrap($row)
+                .find('td')
+                .eq(1)
+                .should('contain.text', '01 JAN, 2024')
+                cy.wrap($row)
+                .find('td')
+                .eq(2)
+                .should('contain.text', 'MONDAY')
+                cy.wrap($row)
+                .find('td')
+                .eq(3)
+                .should('contain', enteredDetails)
+                cy.wrap($row)
+                .find('td')
+                .eq(4)
+                .should('contain', enteredRemarks)
+            }
+        })
+    })
+
+    it('Add New Project test', () => {
+
+        cy.visit("URL/Account/login")
+        cy.get("#email").focus().type("admin")
+        cy.get('#password').focus().type('admin1')
+        cy.get('#submit').click()
+        cy.url().should('eq', 'URL/Home/Dashboard')
+        
+        // Adding a new project
+
+        cy.get('#Project').click({waitForAnimations: false})
+        // cy.wait(5000)
+        // cy.url().should('eq', 'URL/Project/Index')
+        cy.visit('URL/Project/Index')
+        
+        // Add new Project
+
+        cy.get('#AddnewProject').click({waitForAnimations: false})
+        cy.url().should('eq', 'URL/Project/Details')
+
+        // Make a new Project
+        const currentTime = new Date().toLocaleTimeString()
+
+        cy.get('#projectName').focus().type(currentTime)
+        cy.get('#FromDt').focus().type('2023-12-25')
+        cy.get('#ToDt').focus().type('2023-12-31')
+        // cy.visit('https://www.insider.com/sc/on-running-is-the-sportswear-brand-rethinking-sustainability')
+        // cy.get('img[src="https://media-s3-us-east-1.ceros.com/business-insi…4141/outline.png?imageOpt=1&fit=bounds&width=1080"]').trigger('mousedown', {which: 1})
+        // cy.trigger('mousemove').visit('URL/Project/Details')
+        // cy.get('#dropContainer').trigger('mouseup', {force: true})
+        cy.get('#submitProject').click()
+        // cy.visit('URL/Project/Details?id=198')
+
+    })
+
+    it('Add Schedule to the Project test', () => {
+
+        cy.visit("URL/Account/login")
+        cy.get("#email").focus().type("admin")
+        cy.get('#password').focus().type('admin1')
+        cy.get('#submit').click()
+        cy.url().should('eq', 'URL/Home/Dashboard')      
+
+
+        cy.get('div[onclick="openProDetails(28)"]').click()
+
+        cy.url().should('eq', 'URL/Project/Details?id=28')
+
+        cy.get('#SheduleTab').click()
+
+        cy.get('#sDate').focus().type('2024-01-02')
+        cy.get('#sDetails').focus().type("adasd")
+        cy.get('#sRemarks').focus().type('asccsa')
+
+        let enteredDate, enteredDetails, enteredRemarks;
+        cy.get('#sDate').invoke('val').then((val) => {
+            enteredDate = val
+        })
+        cy.get('#sDetails').invoke('val').then((val) => {
+            enteredDetails = val
+        })
+        cy.get('#sRemarks').invoke('val').then((val) => {
+            enteredRemarks = val
+        })
+
+        cy.get('#addShedule').click()
+
+
+        // Checking value in table below
+
+        cy.get('table tbody tr').each(($row, index) => {
+            if(index === 1){
+                cy.wrap($row)
+                .find('td')
+                .should('have.length', 6)
+                .eq(0)
+                .should('contain.text', 'Day 2')
+                cy.wrap($row)
+                .find('td')
+                .eq(1)
+                .should('contain.text', '02 JAN, 2024')
+                cy.wrap($row)
+                .find('td')
+                .eq(2)
+                .should('contain.text', 'TUESDAY')
+                cy.wrap($row)
+                .find('td')
+                .eq(3)
+                .should('contain', enteredDetails)
+                cy.wrap($row)
+                .find('td')
+                .eq(4)
+                .should('contain', enteredRemarks)
+            }
+        })
+    })
+})`,
       language: "javascript",
       framework: "Cypress",
-      difficulty: "Beginner",
-      features: ["Element Selection", "Assertions", "State Verification"]
+      difficulty: "Intermediate",
+      features: ["Form submission validation", "Table data verification & DOM traversal", "Data extraction using .invoke()", "Assertion chaining with Chai", "URL validation & navigation testing"]
     },
     {
       title: "Network Request Stubbing",
@@ -211,49 +489,49 @@ public class BasicTest {
       difficulty: "Beginner",
       features: ["Setup", "Navigation", "Assertions"]
     }
-  ],
-  jest: [
-    {
-      title: "Component Testing",
-      description: "Test React components with Jest",
-      code: `import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Button } from './Button';
-
-describe('Button Component', () => {
-  it('should render button with text', () => {
-    render(<Button>Click me</Button>);
-    
-    const button = screen.getByRole('button', { name: 'Click me' });
-    expect(button).toBeInTheDocument();
-    expect(button).toBeEnabled();
-  });
-
-  it('should handle click events', () => {
-    const handleClick = jest.fn();
-    
-    render(<Button onClick={handleClick}>Click me</Button>);
-    
-    const button = screen.getByRole('button', { name: 'Click me' });
-    fireEvent.click(button);
-    
-    expect(handleClick).toHaveBeenCalledTimes(1);
-  });
-
-  it('should be disabled when loading', () => {
-    render(<Button loading>Loading...</Button>);
-    
-    const button = screen.getByRole('button');
-    expect(button).toBeDisabled();
-    expect(button).toHaveAttribute('aria-busy', 'true');
-  });
-});`,
-      language: "typescript",
-      framework: "Jest",
-      difficulty: "Intermediate",
-      features: ["Component Testing", "Event Testing", "Accessibility"]
-    }
   ]
+//   jest: [
+//     {
+//       title: "Component Testing",
+//       description: "Test React components with Jest",
+//       code: `import React from 'react';
+// import { render, screen, fireEvent } from '@testing-library/react';
+// import { Button } from './Button';
+
+// describe('Button Component', () => {
+//   it('should render button with text', () => {
+//     render(<Button>Click me</Button>);
+    
+//     const button = screen.getByRole('button', { name: 'Click me' });
+//     expect(button).toBeInTheDocument();
+//     expect(button).toBeEnabled();
+//   });
+
+//   it('should handle click events', () => {
+//     const handleClick = jest.fn();
+    
+//     render(<Button onClick={handleClick}>Click me</Button>);
+    
+//     const button = screen.getByRole('button', { name: 'Click me' });
+//     fireEvent.click(button);
+    
+//     expect(handleClick).toHaveBeenCalledTimes(1);
+//   });
+
+//   it('should be disabled when loading', () => {
+//     render(<Button loading>Loading...</Button>);
+    
+//     const button = screen.getByRole('button');
+//     expect(button).toBeDisabled();
+//     expect(button).toHaveAttribute('aria-busy', 'true');
+//   });
+// });`,
+//       language: "typescript",
+//       framework: "Jest",
+//       difficulty: "Intermediate",
+//       features: ["Component Testing", "Event Testing", "Accessibility"]
+//     }
+//   ]
 }
 
 const frameworkColors: Record<string, string> = {
@@ -337,7 +615,7 @@ export function Automation() {
               <TabsTrigger value="playwright">Playwright</TabsTrigger>
               <TabsTrigger value="cypress">Cypress</TabsTrigger>
               <TabsTrigger value="selenium">Selenium</TabsTrigger>
-              <TabsTrigger value="jest">Jest</TabsTrigger>
+              {/* <TabsTrigger value="jest">Jest</TabsTrigger> */}
             </TabsList>
 
             {Object.entries(codeSnippets).map(([framework, snippets]) => (
@@ -356,7 +634,7 @@ export function Automation() {
                       <div>
                         <h3 className="text-2xl font-bold capitalize">{framework} Testing</h3>
                         <p className="text-muted-foreground">
-                          {framework === "playwright" && "Modern end-to-end testing with reliable auto-waits and cross-browser support"}
+                          {framework === "playwright" && "Built a scalable end-to-end automation framework using Playwright with TypeScript, following the Page Object Model (POM) design pattern and BDD (Behavior-Driven Development) with Cucumber and Gherkin syntax."}
                           {framework === "cypress" && "Fast, easy, and reliable testing for anything that runs in a browser"}
                           {framework === "selenium" && "Legacy browser automation with extensive language support"}
                           {framework === "jest" && "Delightful JavaScript testing with zero configuration"}
