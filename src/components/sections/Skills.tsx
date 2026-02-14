@@ -76,7 +76,7 @@ const skillsData = {
   automation: [
     { 
       name: "Playwright", 
-      level: "Expert",
+      level: "Intermediate",
       description: "Modern end-to-end testing framework",
       usage: "Cross-browser regression testing in CI/CD pipeline",
       icon: Play,
@@ -84,7 +84,7 @@ const skillsData = {
     },
     { 
       name: "Cypress", 
-      level: "Advanced",
+      level: "Intermediate",
       description: "JavaScript-based end-to-end testing",
       usage: "Fast component testing and API integration testing",
       icon: Terminal,
@@ -92,25 +92,25 @@ const skillsData = {
     },
     { 
       name: "Selenium WebDriver", 
-      level: "Expert",
+      level: "Beginner",
       description: "Legacy browser automation framework",
       usage: "Maintaining existing test suites for enterprise clients",
       icon: Globe,
       color: "text-purple-600 dark:text-purple-500"
     },
-    { 
-      name: "Jest & React Testing Library", 
-      level: "Advanced",
-      description: "Unit and integration testing for React apps",
-      usage: "Component testing with focus on user behavior",
-      icon: Cpu,
-      color: "text-orange-600 dark:text-orange-500"
-    },
+    // { 
+    //   name: "Jest & React Testing Library", 
+    //   level: "Advanced",
+    //   description: "Unit and integration testing for React apps",
+    //   usage: "Component testing with focus on user behavior",
+    //   icon: Cpu,
+    //   color: "text-orange-600 dark:text-orange-500"
+    // },
   ],
   performance: [
     { 
       name: "Load Testing", 
-      level: "Advanced",
+      level: "Beginner",
       description: "Simulating user traffic and server load",
       usage: "Identifying bottlenecks before production deployment",
       icon: Zap,
@@ -118,7 +118,7 @@ const skillsData = {
     },
     { 
       name: "Performance Monitoring", 
-      level: "Expert",
+      level: "Beginner",
       description: "Real-time performance metrics and alerts",
       usage: "Continuous monitoring of Core Web Vitals and API response times",
       icon: Activity,
@@ -126,7 +126,7 @@ const skillsData = {
     },
     { 
       name: "Memory Leak Detection", 
-      level: "Advanced",
+      level: "Beginner",
       description: "Identifying and preventing memory issues",
       usage: "Critical for long-running applications and mobile apps",
       icon: AlertTriangle,
@@ -150,32 +150,32 @@ const skillsData = {
       icon: Terminal,
       color: "text-pink-500 dark:text-pink-400"
     },
-    { 
-      name: "API Security Testing", 
-      level: "Intermediate",
-      description: "Identifying API vulnerabilities and security gaps",
-      usage: "OWASP security testing and authentication validation",
-      icon: Lock,
-      color: "text-red-500 dark:text-red-400"
-    },
+    // { 
+    //   name: "API Security Testing", 
+    //   level: "Intermediate",
+    //   description: "Identifying API vulnerabilities and security gaps",
+    //   usage: "OWASP security testing and authentication validation",
+    //   icon: Lock,
+    //   color: "text-red-500 dark:text-red-400"
+    // },
   ],
   security: [
-    { 
-      name: "OWASP Testing", 
-      level: "Intermediate",
-      description: "Security testing based on OWASP standards",
-      usage: "Identifying common web application vulnerabilities",
-      icon: Lock,
-      color: "text-red-600 dark:text-red-500"
-    },
-    { 
-      name: "Penetration Testing", 
-      level: "Intermediate",
-      description: "Ethical hacking to find security flaws",
-      usage: "Simulated attacks to test system defenses",
-      icon: Shield,
-      color: "text-orange-600 dark:text-orange-500"
-    },
+    // { 
+    //   name: "OWASP Testing", 
+    //   level: "Intermediate",
+    //   description: "Security testing based on OWASP standards",
+    //   usage: "Identifying common web application vulnerabilities",
+    //   icon: Lock,
+    //   color: "text-red-600 dark:text-red-500"
+    // },
+    // { 
+    //   name: "Penetration Testing", 
+    //   level: "Intermediate",
+    //   description: "Ethical hacking to find security flaws",
+    //   usage: "Simulated attacks to test system defenses",
+    //   icon: Shield,
+    //   color: "text-orange-600 dark:text-orange-500"
+    // },
     { 
       name: "Authentication Testing", 
       level: "Advanced",
@@ -194,8 +194,16 @@ const skillsData = {
       icon: CheckCircle,
       color: "text-blue-500 dark:text-blue-400"
     },
+    // { 
+    //   name: "TestRail", 
+    //   level: "Advanced",
+    //   description: "Test management and reporting",
+    //   usage: "Detailed test execution reports and metrics",
+    //   icon: FileText,
+    //   color: "text-purple-500 dark:text-purple-400"
+    // },
     { 
-      name: "TestRail", 
+      name: "Linear", 
       level: "Advanced",
       description: "Test management and reporting",
       usage: "Detailed test execution reports and metrics",
@@ -210,14 +218,14 @@ const skillsData = {
       icon: GitBranch,
       color: "text-black dark:text-white"
     },
-    { 
-      name: "Docker", 
-      level: "Intermediate",
-      description: "Containerized testing environments",
-      usage: "Consistent testing environments across teams",
-      icon: Package,
-      color: "text-blue-600 dark:text-blue-500"
-    },
+    // { 
+    //   name: "Docker", 
+    //   level: "Intermediate",
+    //   description: "Containerized testing environments",
+    //   usage: "Consistent testing environments across teams",
+    //   icon: Package,
+    //   color: "text-blue-600 dark:text-blue-500"
+    // },
   ],
 }
 
@@ -268,7 +276,7 @@ const SkillChip = ({ skill, index }: { skill: any, index: number }) => {
             </Card>
           </motion.div>
         </TooltipTrigger>
-        <TooltipContent className="max-w-xs p-4" side="top">
+        <TooltipContent className="max-w-xs p-4 bg-background/95 backdrop-blur-sm border border-border shadow-2xl" side="top">
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
               <Icon className={`h-4 w-4 ${skill.color}`} />
