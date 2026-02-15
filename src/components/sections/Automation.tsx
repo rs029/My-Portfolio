@@ -6,16 +6,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { 
-  Code, 
-  Play, 
-  Copy, 
-  CheckCircle, 
-  Terminal, 
-  Cpu, 
-  Zap, 
-  Globe, 
-  Shield, 
+import { CodeModal } from "@/components/ui/code-modal"
+import { DemoRunner } from "@/components/ui/demo-runner"
+import { fullCodeExamples } from "@/data/codeExamples"
+import {
+  Code,
+  Play,
+  Copy,
+  CheckCircle,
+  Terminal,
+  Cpu,
+  Zap,
+  Globe,
+  Shield,
   Bug,
   Download,
   Github,
@@ -173,33 +176,33 @@ When('clicks on {string}', async (itemName: string) => {
       framework: "Playwright",
       difficulty: "Advanced",
       features: ["Form Global timeout configuration (Cucumber hooks)", "Multi-tab handling using Playwright context", "Reusable Page Object architecture", "Defensive error handling for closed pages"]
-    },
-    {
-      title: "API Testing with Playwright",
-      description: "Test API responses and status codes",
-      code: `import { test, expect } from '@playwright/test';
-
-test('API response validation', async ({ request }) => {
-  // Make GET request
-  const response = await request.get('/api/users');
-  
-  // Verify status code
-  expect(response.status()).toBe(200);
-  
-  // Verify response body
-  const users = await response.json();
-  expect(users).toHaveLength(10);
-  
-  // Verify user structure
-  expect(users[0]).toHaveProperty('id');
-  expect(users[0]).toHaveProperty('name');
-  expect(users[0]).toHaveProperty('email');
-});`,
-      language: "typescript",
-      framework: "Playwright",
-      difficulty: "Intermediate",
-      features: ["API Testing", "JSON Validation", "Status Codes"]
     }
+    //     {
+    //       title: "API Testing with Playwright",
+    //       description: "Test API responses and status codes",
+    //       code: `import { test, expect } from '@playwright/test';
+
+    // test('API response validation', async ({ request }) => {
+    //   // Make GET request
+    //   const response = await request.get('/api/users');
+
+    //   // Verify status code
+    //   expect(response.status()).toBe(200);
+
+    //   // Verify response body
+    //   const users = await response.json();
+    //   expect(users).toHaveLength(10);
+
+    //   // Verify user structure
+    //   expect(users[0]).toHaveProperty('id');
+    //   expect(users[0]).toHaveProperty('name');
+    //   expect(users[0]).toHaveProperty('email');
+    // });`,
+    //       language: "typescript",
+    //       framework: "Playwright",
+    //       difficulty: "Intermediate",
+    //       features: ["API Testing", "JSON Validation", "Status Codes"]
+    //     }
   ],
   cypress: [
     {
@@ -303,235 +306,238 @@ test('API response validation', async ({ request }) => {
         })
     })
 
-    it('Add New Project test', () => {
-
-        cy.visit("URL/Account/login")
-        cy.get("#email").focus().type("admin")
-        cy.get('#password').focus().type('admin1')
-        cy.get('#submit').click()
-        cy.url().should('eq', 'URL/Home/Dashboard')
-        
-        // Adding a new project
-
-        cy.get('#Project').click({waitForAnimations: false})
-        // cy.wait(5000)
-        // cy.url().should('eq', 'URL/Project/Index')
-        cy.visit('URL/Project/Index')
-        
-        // Add new Project
-
-        cy.get('#AddnewProject').click({waitForAnimations: false})
-        cy.url().should('eq', 'URL/Project/Details')
-
-        // Make a new Project
-        const currentTime = new Date().toLocaleTimeString()
-
-        cy.get('#projectName').focus().type(currentTime)
-        cy.get('#FromDt').focus().type('2023-12-25')
-        cy.get('#ToDt').focus().type('2023-12-31')
-        // cy.visit('https://www.insider.com/sc/on-running-is-the-sportswear-brand-rethinking-sustainability')
-        // cy.get('img[src="https://media-s3-us-east-1.ceros.com/business-insi…4141/outline.png?imageOpt=1&fit=bounds&width=1080"]').trigger('mousedown', {which: 1})
-        // cy.trigger('mousemove').visit('URL/Project/Details')
-        // cy.get('#dropContainer').trigger('mouseup', {force: true})
-        cy.get('#submitProject').click()
-        // cy.visit('URL/Project/Details?id=198')
-
-    })
-
-    it('Add Schedule to the Project test', () => {
-
-        cy.visit("URL/Account/login")
-        cy.get("#email").focus().type("admin")
-        cy.get('#password').focus().type('admin1')
-        cy.get('#submit').click()
-        cy.url().should('eq', 'URL/Home/Dashboard')      
-
-
-        cy.get('div[onclick="openProDetails(28)"]').click()
-
-        cy.url().should('eq', 'URL/Project/Details?id=28')
-
-        cy.get('#SheduleTab').click()
-
-        cy.get('#sDate').focus().type('2024-01-02')
-        cy.get('#sDetails').focus().type("adasd")
-        cy.get('#sRemarks').focus().type('asccsa')
-
-        let enteredDate, enteredDetails, enteredRemarks;
-        cy.get('#sDate').invoke('val').then((val) => {
-            enteredDate = val
-        })
-        cy.get('#sDetails').invoke('val').then((val) => {
-            enteredDetails = val
-        })
-        cy.get('#sRemarks').invoke('val').then((val) => {
-            enteredRemarks = val
-        })
-
-        cy.get('#addShedule').click()
-
-
-        // Checking value in table below
-
-        cy.get('table tbody tr').each(($row, index) => {
-            if(index === 1){
-                cy.wrap($row)
-                .find('td')
-                .should('have.length', 6)
-                .eq(0)
-                .should('contain.text', 'Day 2')
-                cy.wrap($row)
-                .find('td')
-                .eq(1)
-                .should('contain.text', '02 JAN, 2024')
-                cy.wrap($row)
-                .find('td')
-                .eq(2)
-                .should('contain.text', 'TUESDAY')
-                cy.wrap($row)
-                .find('td')
-                .eq(3)
-                .should('contain', enteredDetails)
-                cy.wrap($row)
-                .find('td')
-                .eq(4)
-                .should('contain', enteredRemarks)
-            }
-        })
-    })
-})`,
+    // HERE: View Full Example
+`,
       language: "javascript",
       framework: "Cypress",
       difficulty: "Intermediate",
       features: ["Form submission validation", "Table data verification & DOM traversal", "Data extraction using .invoke()", "Assertion chaining with Chai", "URL validation & navigation testing"]
-    },
-    {
-      title: "Network Request Stubbing",
-      description: "Mock API responses for testing",
-      code: `describe('API Mocking', () => {
-  it('should handle loading states', () => {
-    // Stub API request
-    cy.intercept('GET', '/api/data', {
-      fixture: 'sample-data.json',
-      delay: 1000
-    }).as('getData');
-
-    cy.visit('/dashboard');
-
-    // Verify loading state
-    cy.get('[data-testid="loading"]')
-      .should('be.visible');
-
-    // Wait for API call
-    cy.wait('@getData');
-
-    // Verify data loaded
-    cy.get('[data-testid="loading"]')
-      .should('not.exist');
-    
-    cy.get('[data-testid="data-container"]')
-      .should('be.visible');
-  });
-});`,
-      language: "javascript",
-      framework: "Cypress",
-      difficulty: "Advanced",
-      features: ["Network Stubbing", "Fixtures", "Loading States"]
     }
+    //     {
+    //       title: "Network Request Stubbing",
+    //       description: "Mock API responses for testing",
+    //       code: `describe('API Mocking', () => {
+    //   it('should handle loading states', () => {
+    //     // Stub API request
+    //     cy.intercept('GET', '/api/data', {
+    //       fixture: 'sample-data.json',
+    //       delay: 1000
+    //     }).as('getData');
+
+    //     cy.visit('/dashboard');
+
+    //     // Verify loading state
+    //     cy.get('[data-testid="loading"]')
+    //       .should('be.visible');
+
+    //     // Wait for API call
+    //     cy.wait('@getData');
+
+    //     // Verify data loaded
+    //     cy.get('[data-testid="loading"]')
+    //       .should('not.exist');
+
+    //     cy.get('[data-testid="data-container"]')
+    //       .should('be.visible');
+    //   });
+    // });`,
+    //       language: "javascript",
+    //       framework: "Cypress",
+    //       difficulty: "Advanced",
+    //       features: ["Network Stubbing", "Fixtures", "Loading States"]
+    //     }
   ],
   selenium: [
     {
-      title: "WebDriver Setup",
-      description: "Basic Selenium WebDriver configuration",
-      code: `import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+      title: "Login Scenario",
+      description: "Basic Selenium Login Scenario with Gherkin Syntax",
+      code: `using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using TechTalk.SpecFlow;
+using System;
+using System.Threading;
 
-public class BasicTest {
-    private WebDriver driver;
-    private WebDriverWait wait;
+namespace QDCTestFrame.StepDefinitions
+{
+    [Binding]
+    public class LoginSteps
+    {
+        private IWebDriver _driver = null!;
+        private WebDriverWait _wait = null!;
 
-    @Before
-    public void setUp() {
-        // Initialize Chrome driver
-        driver = new ChromeDriver();
-        wait = new WebDriverWait(driver, 10);
-        
-        // Maximize window
-        driver.manage().window().maximize();
-    }
-
-    @Test
-    public void testPageTitle() {
-        // Navigate to page
-        driver.get("https://example.com");
-        
-        // Wait for page to load
-        wait.until(ExpectedConditions.titleContains("Example"));
-        
-        // Verify title
-        String title = driver.getTitle();
-        assertTrue(title.contains("Example"));
-    }
-
-    @After
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
+        [BeforeScenario]
+        public void Setup()
+        {
+            // Print sleep configuration at the start of each test scenario
+            Console.WriteLine("\n" + new string('*', 60));
+            Console.WriteLine("* BEFORE SCENARIO - SLEEP CONFIGURATION STATUS:");
+            TestConfiguration.PrintSleepConfiguration();
+            Console.WriteLine(new string('*', 60) + "\n");
+            
+            SharedContext.InitializeDriver();
+            _driver = SharedContext.Driver;
+            _wait = SharedContext.Wait;
         }
-    }
-}`,
-      language: "java",
+
+        [AfterScenario]
+        public void Teardown()
+        {
+            SharedContext.CleanupDriver();
+            _driver = null!;
+            _wait = null!;
+        }
+
+        [Given(@"the user is on the login page")]
+        public void GivenTheUserIsOnTheLoginPage()
+        {
+            // Print sleep configuration at the very beginning of test execution
+            Console.WriteLine("\n" + new string('=', 50));
+            Console.WriteLine("TEST EXECUTION STARTED - SLEEP CONFIGURATION:");
+            TestConfiguration.PrintSleepConfiguration();
+            Console.WriteLine(new string('=', 50) + "\n");
+            
+            // Debug: Print environment variables to verify they're loaded
+            TestConfiguration.PrintEnvironmentVariables();
+            
+            _driver.Navigate().GoToUrl(TestConfiguration.GetLoginUrl());
+            _wait.Until(driver => driver.FindElement(By.Id("txtUserId")).Displayed);
+            Thread.Sleep(2000); // 2 second wait for visibility
+        }
+            
+        [When(@"the user enters the test email ""([^""]*)""")]
+        public void WhenTheUserEntersTheTestEmail(string email)
+        {
+            var emailField = _driver.FindElement(By.Id("txtUserId"));
+            emailField.Clear();
+            emailField.SendKeys(email);
+            Thread.Sleep(2000); // 2 second wait for visibility
+        }
+
+        [When(@"enters the test password ""([^""]*)""")]
+        public void WhenEntersTheTestPassword(string password)
+        {
+            var passwordField = _driver.FindElement(By.Id("txtPassword"));
+            passwordField.Clear();
+            passwordField.SendKeys(password);
+            Thread.Sleep(2000); // 2 second wait for visibility
+        }
+
+        [When(@"enters the store code ""([^""]*)""")]
+        public void WhenEntersTheStoreCode(string storeCode)
+        {
+            var storeCodeField = _driver.FindElement(By.Id("txtBranchPin"));
+            storeCodeField.Clear();
+            storeCodeField.SendKeys(storeCode);
+            Thread.Sleep(2000); // 2 second wait for visibility
+        }
+
+        [When(@"clicks the login button")]
+        public void WhenClicksTheLoginButton()
+        {
+            var loginButton = _driver.FindElement(By.Id("btnLogin"));
+            loginButton.Click();
+            
+            // Wait a moment for the page to process
+            Thread.Sleep(2000);
+            
+            // Handle any alerts that might appear immediately after login
+            try
+            {
+                // Wait a short time for alert to appear
+                Thread.Sleep(1000);
+                var alert = _driver.SwitchTo().Alert();
+                var alertText = alert.Text;
+                alert.Accept();
+                
+                // Store the alert text for later verification
+                ScenarioContext.Current["LastAlertText"] = alertText;
+            }
+            catch (NoAlertPresentException)
+            {
+                // No alert present, which is fine
+                ScenarioContext.Current["LastAlertText"] = null;
+            }
+            
+            Thread.Sleep(2000); // Additional 2 second wait for visibility
+        }
+
+        [Then(@"the user should be redirected to the dashboard")]
+        public void ThenTheUserShouldBeRedirectedToTheDashboard()
+        {
+            try
+            {
+                // Wait for URL to change from login page
+                _wait.Until(driver => !driver.Url.Contains("Login") && !driver.Url.Contains("login"));
+                
+                // Check if we're on the dashboard or any authenticated page
+                var currentUrl = _driver.Url;
+                Assert.That(currentUrl, Does.Contain("cleankart.quickdrycleaning.com"), 
+                    $"Expected to be redirected to dashboard, but current URL is: {currentUrl}");
+            }
+            catch (WebDriverTimeoutException)
+            {
+                // If timeout occurs, check if we're still on login page (which would indicate login failure)
+                var currentUrl = _driver.Url;
+                Assert.That(!currentUrl.Contains("Login"), 
+                    $"Login failed - still on login page. Current URL: {currentUrl}");
+                
+                // If not on login page, assume we're on some other page (might be dashboard)
+                Assert.That(currentUrl.Contains("cleankart.quickdrycleaning.com"), 
+                    $"Unexpected URL after login: {currentUrl}");
+            }
+            Thread.Sleep(2000); // 2 second wait for visibility
+        }
+        `,
+      language: "C# with .NET & NUnit",
       framework: "Selenium",
-      difficulty: "Beginner",
-      features: ["Setup", "Navigation", "Assertions"]
+      difficulty: "Advanced",
+      features: ["Scenario lifecycle management", "Explicit wait implementation (WebDriverWait)", "Alert detection & handling logic", "Environment-based configuration management"]
     }
   ]
-//   jest: [
-//     {
-//       title: "Component Testing",
-//       description: "Test React components with Jest",
-//       code: `import React from 'react';
-// import { render, screen, fireEvent } from '@testing-library/react';
-// import { Button } from './Button';
+  //   jest: [
+  //     {
+  //       title: "Component Testing",
+  //       description: "Test React components with Jest",
+  //       code: `import React from 'react';
+  // import { render, screen, fireEvent } from '@testing-library/react';
+  // import { Button } from './Button';
 
-// describe('Button Component', () => {
-//   it('should render button with text', () => {
-//     render(<Button>Click me</Button>);
-    
-//     const button = screen.getByRole('button', { name: 'Click me' });
-//     expect(button).toBeInTheDocument();
-//     expect(button).toBeEnabled();
-//   });
+  // describe('Button Component', () => {
+  //   it('should render button with text', () => {
+  //     render(<Button>Click me</Button>);
 
-//   it('should handle click events', () => {
-//     const handleClick = jest.fn();
-    
-//     render(<Button onClick={handleClick}>Click me</Button>);
-    
-//     const button = screen.getByRole('button', { name: 'Click me' });
-//     fireEvent.click(button);
-    
-//     expect(handleClick).toHaveBeenCalledTimes(1);
-//   });
+  //     const button = screen.getByRole('button', { name: 'Click me' });
+  //     expect(button).toBeInTheDocument();
+  //     expect(button).toBeEnabled();
+  //   });
 
-//   it('should be disabled when loading', () => {
-//     render(<Button loading>Loading...</Button>);
-    
-//     const button = screen.getByRole('button');
-//     expect(button).toBeDisabled();
-//     expect(button).toHaveAttribute('aria-busy', 'true');
-//   });
-// });`,
-//       language: "typescript",
-//       framework: "Jest",
-//       difficulty: "Intermediate",
-//       features: ["Component Testing", "Event Testing", "Accessibility"]
-//     }
-//   ]
+  //   it('should handle click events', () => {
+  //     const handleClick = jest.fn();
+
+  //     render(<Button onClick={handleClick}>Click me</Button>);
+
+  //     const button = screen.getByRole('button', { name: 'Click me' });
+  //     fireEvent.click(button);
+
+  //     expect(handleClick).toHaveBeenCalledTimes(1);
+  //   });
+
+  //   it('should be disabled when loading', () => {
+  //     render(<Button loading>Loading...</Button>);
+
+  //     const button = screen.getByRole('button');
+  //     expect(button).toBeDisabled();
+  //     expect(button).toHaveAttribute('aria-busy', 'true');
+  //   });
+  // });`,
+  //       language: "typescript",
+  //       framework: "Jest",
+  //       difficulty: "Intermediate",
+  //       features: ["Component Testing", "Event Testing", "Accessibility"]
+  //     }
+  //   ]
 }
 
 const frameworkColors: Record<string, string> = {
@@ -548,8 +554,18 @@ const difficultyColors: Record<string, string> = {
 }
 
 export function Automation() {
-  const [activeTab, setActiveTab] = useState("playwright")
+  const [activeTab, setActiveTab] = useState<AvailableFramework>("playwright")
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
+  const [showCodeModal, setShowCodeModal] = useState(false)
+  const [showDemoRunner, setShowDemoRunner] = useState(false)
+  const [selectedExample, setSelectedExample] = useState<any>(null)
+  const [currentIndex, setCurrentIndex] = useState<number>(0)
+
+  const handleTabChange = (value: string) => {
+    if (value === 'playwright' || value === 'cypress' || value === 'selenium') {
+      setActiveTab(value)
+    }
+  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -585,6 +601,65 @@ export function Automation() {
     }
   }
 
+  type AvailableFramework = 'playwright' | 'cypress' | 'selenium';
+
+  const viewFullExample = (framework: AvailableFramework, index: number) => {
+    console.log('viewFullExample called with:', { framework, index })
+    const example = fullCodeExamples[framework]?.[index]
+    console.log('Found example:', example)
+    if (example) {
+      setCurrentIndex(index)
+      setSelectedExample(example)
+      setShowCodeModal(true)
+    } else {
+      // Fallback: use the snippet data if full example not found
+      console.log('Using fallback for:', framework, index)
+      const snippet = codeSnippets[framework]?.[index]
+      console.log('Found snippet:', snippet)
+      if (snippet) {
+        setSelectedExample({
+          id: `${framework}-${index}`,
+          title: snippet.title,
+          fullCode: snippet.code,
+          framework: framework,
+          features: snippet.features
+        })
+        setShowCodeModal(true)
+      }
+    }
+  }
+
+  const openGithubExample = (framework: AvailableFramework, index: number) => {
+    const githubUrls: Record<AvailableFramework, string[]> = {
+      playwright: [
+        'https://github.com/rs029/QDC-Playwright/blob/main/features/step-definitions/login.steps.ts',
+        'https://github.com/rs029/QDC-Playwright/blob/main/features/step-definitions/sanity.steps.ts'
+      ],
+      cypress: [
+        'https://github.com/rs029/Project_Initial_Test/blob/master/cypress/e2e/firstTest.cy.js'
+      ],
+      selenium: [
+        'https://github.com/rs029/QDCTestFrame/blob/main/QDCLogin/StepDefinitions/LoginSteps.cs'
+      ]
+    }
+
+    const url = githubUrls[framework]?.[index];
+    if (url) {
+      window.open(url, '_blank');
+    }
+  }
+
+  const runDemo = (framework: AvailableFramework, index: number) => {
+    console.log('runDemo called with:', { framework, index })
+    const snippet = codeSnippets[framework as keyof typeof codeSnippets]?.[index]
+    console.log('Found snippet for demo:', snippet)
+    if (snippet) {
+      setCurrentIndex(index)
+      setSelectedExample(snippet)
+      setShowDemoRunner(true)
+    }
+  }
+
   return (
     <section id="automation" className="py-20 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -599,7 +674,7 @@ export function Automation() {
             <span className="gradient-text">Test Automation</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Practical code examples and testing patterns for modern automation frameworks. 
+            Practical code examples and testing patterns for modern automation frameworks.
             Learn industry-standard approaches to quality assurance.
           </p>
         </motion.div>
@@ -610,7 +685,7 @@ export function Automation() {
           initial="hidden"
           animate="visible"
         >
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="playwright">Playwright</TabsTrigger>
               <TabsTrigger value="cypress">Cypress</TabsTrigger>
@@ -717,14 +792,23 @@ export function Automation() {
 
                             {/* Actions */}
                             <div className="flex space-x-2 mt-4">
-                              <Button size="sm" variant="outline" className="flex-1">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="flex-1"
+                                onClick={() => viewFullExample(activeTab, index)}
+                              >
                                 <Github className="h-4 w-4 mr-2" />
                                 View Full Example
                               </Button>
-                              <Button size="sm" className="flex-1">
+                              {false && <Button
+                                size="sm"
+                                className="flex-1"
+                                onClick={() => runDemo(activeTab, index)}
+                              >
                                 <Play className="h-4 w-4 mr-2" />
                                 Run Demo
-                              </Button>
+                              </Button>}
                             </div>
                           </CardContent>
                         </Card>
@@ -772,6 +856,25 @@ export function Automation() {
           </div>
         </motion.div>
       </div>
+
+      {/* Modals */}
+      {selectedExample && (
+        <>
+          <CodeModal
+            isOpen={showCodeModal}
+            onClose={() => setShowCodeModal(false)}
+            example={selectedExample}
+            framework={activeTab}
+            onGitHubClick={() => openGithubExample(activeTab, currentIndex)}
+          />
+
+          <DemoRunner
+            isOpen={showDemoRunner}
+            onClose={() => setShowDemoRunner(false)}
+            example={selectedExample}
+          />
+        </>
+      )}
     </section>
   )
 }
