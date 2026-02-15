@@ -397,21 +397,21 @@ export function Skills() {
         >
           <Card className="text-center border-2 border-primary/20">
             <CardContent className="p-6">
-              <div className="text-3xl font-bold gradient-text mb-2">15+</div>
+              <div className="text-3xl font-bold gradient-text mb-2">2+</div>
               <p className="text-sm text-muted-foreground">Years of Testing Experience</p>
             </CardContent>
           </Card>
           
           <Card className="text-center border-2 border-green-500/20">
             <CardContent className="p-6">
-              <div className="text-3xl font-bold text-green-500 mb-2">500+</div>
+              <div className="text-3xl font-bold text-green-500 mb-2">150+</div>
               <p className="text-sm text-muted-foreground">Automated Test Cases</p>
             </CardContent>
           </Card>
           
           <Card className="text-center border-2 border-blue-500/20">
             <CardContent className="p-6">
-              <div className="text-3xl font-bold text-blue-500 mb-2">50+</div>
+              <div className="text-3xl font-bold text-blue-500 mb-2">10+</div>
               <p className="text-sm text-muted-foreground">Tools & Frameworks</p>
             </CardContent>
           </Card>

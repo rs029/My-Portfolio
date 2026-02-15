@@ -4,151 +4,154 @@ import { motion } from "framer-motion"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ExternalLink, Github, Bug, Shield, Zap, CheckCircle, AlertTriangle, Search } from "lucide-react"
+import { ExternalLink, Github, Bug, Eye, Shield, Zap, CheckCircle, AlertTriangle, Search } from "lucide-react"
 
 const projectsData = [
   {
     id: 1,
-    title: "E-Commerce Test Automation Framework",
-    description: "Comprehensive end-to-end testing solution for a modern e-commerce platform",
+    title: "CleanKart Login & Dashboard Menu Automation Framework",
+    description: "Comprehensive end-to-end testing solution for an SaaS application (172 screens)",
     category: "Automation",
-    tech: ["Playwright", "TypeScript", "CI/CD"],
-    status: "completed",
+    tech: ["Playwright", "TypeScript", "Cucumber", "BDD-Gherkin"],
+    status: "ongoing",
     metrics: {
       testCases: 150,
-      coverage: "85%",
-      bugsFound: 23,
-      executionTime: "12 min"
+      coverage: "52.9%",
+      bugsFound: 0,
+      executionTime: "40 min"
     },
     highlights: [
-      "Reduced manual testing time by 70%",
-      "Critical bug detection in payment flow",
+      "Reduced manual testing time by 10%",
+      "Reduced time spent by 50% on sanity testing before production release",
       "Cross-browser compatibility validation"
     ],
-    github: "https://github.com/username/ecommerce-tests",
-    demo: "https://demo.example.com"
+    github: "https://github.com/rs029/QDC-Playwright/tree/main/features/step-definitions",
+    demo: null
   },
   {
     id: 2,
-    title: "API Security Testing Suite",
-    description: "RESTful API security testing with OWASP compliance validation",
-    category: "Security",
-    tech: ["Postman", "Newman", "JavaScript"],
+    title: "Multilingual CRM (GCC Focused)",
+    description: "Manual functional and localization testing of a bilingual (Arabic & English) CRM with RTL validation and regional compliance checks.",
+    category: "Manual",
+    tech: ["Manual Testing", "Localization Testing", "Functional & Regression Testing"],
     status: "in-progress",
     metrics: {
-      testCases: 89,
-      coverage: "92%",
-      bugsFound: 15,
-      executionTime: "8 min"
+      testCases: 500,
+      coverage: "24.41%",
+      bugsFound: 257,
+      executionTime: "90+ hours"
     },
     highlights: [
-      "OWASP Top 10 vulnerability detection",
-      "Authentication & authorization testing",
-      "Rate limiting and DoS protection validation"
-    ],
-    github: "https://github.com/username/api-security-tests",
-    demo: null
-  },
-  {
-    id: 3,
-    title: "Performance Testing Pipeline",
-    description: "Load testing solution for high-traffic web applications",
-    category: "Performance",
-    tech: ["JMeter", "Gatling", "Docker"],
-    status: "completed",
-    metrics: {
-      testCases: 45,
-      coverage: "78%",
-      bugsFound: 8,
-      executionTime: "25 min"
-    },
-    highlights: [
-      "Identified memory leaks under load",
-      "Database connection pool optimization",
-      "CDN performance improvements"
-    ],
-    github: "https://github.com/username/performance-tests",
-    demo: "https://perf.example.com"
-  },
-  {
-    id: 4,
-    title: "Mobile App Testing Framework",
-    description: "Cross-platform mobile application testing solution",
-    category: "Mobile",
-    tech: ["Appium", "Java", "TestNG"],
-    status: "planning",
-    metrics: {
-      testCases: 120,
-      coverage: "0%",
-      bugsFound: 0,
-      executionTime: "TBD"
-    },
-    highlights: [
-      "iOS and Android compatibility",
-      "Gesture and UI testing",
-      "Device farm integration planned"
+      "Identified 250+ functional, global, and localization issues",
+      "Validated Arabic (RTL) & English UI across CRM workflows",
+      "Reduced language-related production defects significantly"
     ],
     github: null,
     demo: null
-  },
-  {
-    id: 5,
-    title: "Regression Testing Dashboard",
-    description: "Real-time regression testing monitoring and reporting system",
-    category: "Tools",
-    tech: ["React", "Node.js", "MongoDB"],
-    status: "completed",
-    metrics: {
-      testCases: 200,
-      coverage: "88%",
-      bugsFound: 31,
-      executionTime: "15 min"
-    },
-    highlights: [
-      "Real-time test execution monitoring",
-      "Automated report generation",
-      "Integration with CI/CD pipeline"
-    ],
-    github: "https://github.com/username/regression-dashboard",
-    demo: "https://dashboard.example.com"
-  },
-  {
-    id: 6,
-    title: "Accessibility Testing Toolkit",
-    description: "WCAG 2.1 compliance testing and validation toolkit",
-    category: "Accessibility",
-    tech: ["axe-core", "Selenium", "Python"],
-    status: "in-progress",
-    metrics: {
-      testCases: 67,
-      coverage: "95%",
-      bugsFound: 12,
-      executionTime: "6 min"
-    },
-    highlights: [
-      "Screen reader compatibility testing",
-      "Keyboard navigation validation",
-      "Color contrast and readability checks"
-    ],
-    github: "https://github.com/username/a11y-toolkit",
-    demo: null
   }
+  // {
+  //   id: 3,
+  //   title: "Performance Testing Pipeline",
+  //   description: "Load testing solution for high-traffic web applications",
+  //   category: "Performance",
+  //   tech: ["JMeter", "Gatling", "Docker"],
+  //   status: "completed",
+  //   metrics: {
+  //     testCases: 45,
+  //     coverage: "78%",
+  //     bugsFound: 8,
+  //     executionTime: "25 min"
+  //   },
+  //   highlights: [
+  //     "Identified memory leaks under load",
+  //     "Database connection pool optimization",
+  //     "CDN performance improvements"
+  //   ],
+  //   github: "https://github.com/username/performance-tests",
+  //   demo: "https://perf.example.com"
+  // },
+  // {
+  //   id: 4,
+  //   title: "Mobile App Testing Framework",
+  //   description: "Cross-platform mobile application testing solution",
+  //   category: "Mobile",
+  //   tech: ["Appium", "Java", "TestNG"],
+  //   status: "planning",
+  //   metrics: {
+  //     testCases: 120,
+  //     coverage: "0%",
+  //     bugsFound: 0,
+  //     executionTime: "TBD"
+  //   },
+  //   highlights: [
+  //     "iOS and Android compatibility",
+  //     "Gesture and UI testing",
+  //     "Device farm integration planned"
+  //   ],
+  //   github: null,
+  //   demo: null
+  // },
+  // {
+  //   id: 5,
+  //   title: "Regression Testing Dashboard",
+  //   description: "Real-time regression testing monitoring and reporting system",
+  //   category: "Tools",
+  //   tech: ["React", "Node.js", "MongoDB"],
+  //   status: "completed",
+  //   metrics: {
+  //     testCases: 200,
+  //     coverage: "88%",
+  //     bugsFound: 31,
+  //     executionTime: "15 min"
+  //   },
+  //   highlights: [
+  //     "Real-time test execution monitoring",
+  //     "Automated report generation",
+  //     "Integration with CI/CD pipeline"
+  //   ],
+  //   github: "https://github.com/username/regression-dashboard",
+  //   demo: "https://dashboard.example.com"
+  // },
+  // {
+  //   id: 6,
+  //   title: "Accessibility Testing Toolkit",
+  //   description: "WCAG 2.1 compliance testing and validation toolkit",
+  //   category: "Accessibility",
+  //   tech: ["axe-core", "Selenium", "Python"],
+  //   status: "in-progress",
+  //   metrics: {
+  //     testCases: 67,
+  //     coverage: "95%",
+  //     bugsFound: 12,
+  //     executionTime: "6 min"
+  //   },
+  //   highlights: [
+  //     "Screen reader compatibility testing",
+  //     "Keyboard navigation validation",
+  //     "Color contrast and readability checks"
+  //   ],
+  //   github: "https://github.com/username/a11y-toolkit",
+  //   demo: null
+  // }
 ]
 
 const statusColors: Record<string, string> = {
   completed: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
   "in-progress": "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+  ongoing: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
   planning: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
 }
 
 const statusIcons: Record<string, React.ComponentType<any>> = {
   completed: CheckCircle,
   "in-progress": Zap,
+  ongoing: Zap,
   planning: Search
 }
 
 const categoryIcons: Record<string, React.ComponentType<any>> = {
   Automation: Bug,
+  Manual: Eye,
   Security: Shield,
   Performance: Zap,
   Mobile: Search,

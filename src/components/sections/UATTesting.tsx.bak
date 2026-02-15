@@ -1,0 +1,642 @@
+"use client"
+
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { 
+  Users,
+  CheckCircle,
+  XCircle,
+  Clock,
+  Calendar,
+  FileText,
+  MessageSquare,
+  ThumbsUp,
+  ThumbsDown,
+  AlertTriangle,
+  Eye,
+  Download,
+  Send,
+  UserCheck,
+  Settings,
+  Star,
+  TrendingUp,
+  BarChart3,
+  Activity,
+  Mail,
+  Phone
+} from "lucide-react"
+
+interface UATSession {
+  id: string
+  title: string
+  description: string
+  project: string
+  version: string
+  startDate: string
+  endDate: string
+  status: 'planning' | 'in-progress' | 'testing' | 'completed' | 'approved' | 'rejected'
+  participants: {
+    business: string[]
+    technical: string[]
+    qa: string[]
+    endUsers: string[]
+  }
+  testScenarios: {
+    id: string
+    title: string
+    description: string
+    businessRequirement: string
+    acceptanceCriteria: string[]
+    testSteps: string[]
+    expectedResult: string
+    actualResult: string
+    status: 'pass' | 'fail' | 'blocked' | 'not-tested'
+    assignedTo: string
+    executionDate: string
+    notes: string[]
+  }[]
+  signOffCriteria: {
+    business: string[]
+    technical: string[]
+    performance: string[]
+    security: string[]
+    usability: string[]
+  }
+  deliverables: string[]
+  risks: string[]
+  communication: {
+    meetings: string[]
+    emails: number
+    reports: number
+  }
+}
+
+interface StakeholderFeedback {
+  stakeholder: string
+  role: string
+  feedback: string
+  rating: number // 1-5 scale
+  concerns: string[]
+  approvalStatus: 'pending' | 'approved' | 'conditional' | 'rejected'
+  date: string
+}
+
+const uatSessions: UATSession[] = [
+  {
+    id: 'UAT001',
+    title: 'E-commerce Platform Launch',
+    description: 'User acceptance testing for new e-commerce platform before public launch',
+    project: 'Online Shopping Platform v2.0',
+    version: 'Release Candidate 1',
+    startDate: '2024-01-15',
+    endDate: '2024-01-26',
+    status: 'completed',
+    participants: {
+      business: ['Product Owner', 'Marketing Manager', 'Sales Director'],
+      technical: ['Tech Lead', 'Backend Developer', 'Frontend Developer'],
+      qa: ['QA Lead', '2 QA Engineers', 'Performance Tester'],
+      endUsers: ['10 Power Users', '5 New Customers', '3 Enterprise Clients']
+    },
+    testScenarios: [
+      {
+        id: 'TS001',
+        title: 'Complete Purchase Flow',
+        description: 'End-to-end testing of customer journey from product discovery to order confirmation',
+        businessRequirement: 'Users must be able to search, select, purchase, and receive confirmation for any product',
+        acceptanceCriteria: [
+          'Search returns relevant results within 2 seconds',
+          'Product pages load correctly with all information',
+          'Add to cart functionality works for all product types',
+          'Checkout process supports all payment methods',
+          'Order confirmation includes all details and tracking number',
+          'Email confirmation is sent immediately'
+        ],
+        testSteps: [
+          'Navigate to homepage',
+          'Search for specific product',
+          'Add product to cart',
+          'Proceed to checkout',
+          'Enter shipping and billing information',
+          'Select payment method',
+          'Complete purchase',
+          'Receive order confirmation'
+        ],
+        expectedResult: 'User successfully completes purchase and receives order confirmation',
+        actualResult: 'All steps completed successfully with minor UI issues noted',
+        status: 'pass',
+        assignedTo: 'QA Team',
+        executionDate: '2024-01-18',
+        notes: [
+          'Payment gateway integration works smoothly',
+          'Mobile responsive design confirmed',
+          'Performance meets requirements',
+          'Minor UI alignment issues in checkout form'
+        ]
+      },
+      {
+        id: 'TS002',
+        title: 'User Account Management',
+        description: 'Testing of user registration, login, profile management, and account settings',
+        businessRequirement: 'Users must be able to create accounts, manage profiles, and control settings',
+        acceptanceCriteria: [
+          'New user registration works with email verification',
+          'Login functionality supports email and social login',
+          'Profile information can be updated and saved',
+          'Password reset functionality works correctly',
+          'Account settings allow customization of preferences',
+          'Privacy settings provide appropriate control over data'
+        ],
+        testSteps: [
+          'Test new user registration with valid email',
+          'Test registration with invalid data (validation)',
+          'Test email login with correct credentials',
+          'Test social media login integration',
+          'Test profile update and save functionality',
+          'Test password reset with email verification',
+          'Test account settings and privacy controls'
+        ],
+        expectedResult: 'All account management features work correctly and securely',
+        actualResult: 'All critical functionality working, some minor usability improvements needed',
+        status: 'pass',
+        assignedTo: 'QA Team',
+        executionDate: '2024-01-20',
+        notes: [
+          'Email verification system working reliably',
+          'Social login integration successful',
+          'Profile update functionality robust',
+          'Password reset meets security requirements',
+          'Privacy settings provide good user control'
+        ]
+      },
+      {
+        id: 'TS003',
+        title: 'Admin Dashboard Functionality',
+        description: 'Testing of administrative features for store management and reporting',
+        businessRequirement: 'Administrators must be able to manage products, orders, customers, and view reports',
+        acceptanceCriteria: [
+          'Product management (CRUD operations) works correctly',
+          'Order management and status updates function properly',
+          'Customer management and search capabilities are effective',
+          'Reporting dashboard provides accurate insights',
+          'Bulk operations work efficiently',
+          'Data export functionality supports multiple formats'
+        ],
+        testSteps: [
+          'Test product creation and editing',
+          'Test inventory management',
+          'Test order processing and status updates',
+          'Test customer search and management',
+          'Test reporting dashboard accuracy',
+          'Test bulk operations (import/export)',
+          'Test data export in multiple formats'
+        ],
+        expectedResult: 'All admin features work correctly and provide required business insights',
+        actualResult: 'All functionality working with performance optimizations needed',
+        status: 'conditional',
+        assignedTo: 'Business Analyst',
+        executionDate: '2024-01-22',
+        notes: [
+          'All core functionality working as expected',
+          'Performance improvements needed for large datasets',
+          'Additional reporting features requested by business',
+          'User training materials need updating'
+        ]
+      }
+    ],
+    signOffCriteria: {
+      business: [
+        'All critical business scenarios pass',
+        'Stakeholder requirements met',
+        'Business processes supported',
+        'User acceptance confirmed'
+      ],
+      technical: [
+        'Performance benchmarks met',
+        'Security requirements satisfied',
+        'Integration points working',
+        'Data integrity maintained',
+        'Error handling appropriate'
+      ],
+      performance: [
+        'Response times within SLA',
+        'Load testing requirements met',
+        'Scalability requirements satisfied',
+        'Resource usage within limits'
+      ],
+      security: [
+        'Authentication and authorization secure',
+        'Data protection measures effective',
+        'Audit requirements satisfied',
+        'Vulnerability assessment passed'
+      ],
+      usability: [
+        'User interface meets accessibility standards',
+        'Navigation is intuitive',
+        'Error messages are clear',
+        'User feedback is positive'
+      ]
+    },
+    deliverables: [
+      'UAT Test Plan Document',
+      'Test Execution Report',
+      'Defect Report with Prioritization',
+      'Performance Test Results',
+      'Security Assessment Report',
+      'User Acceptance Sign-off Form',
+      'Training Documentation',
+      'Go/No-Go Recommendation'
+    ],
+    risks: [
+      'Timeline constraints for launch date',
+      'Stakeholder availability for testing',
+      'Integration with third-party services',
+      'Performance under peak load conditions',
+      'Change management during testing'
+    ],
+    communication: {
+      meetings: [
+        'UAT Kick-off Meeting',
+        'Daily Stand-up Meetings',
+        'Weekly Progress Reviews',
+        'Defect Triage Meetings',
+        'Sign-off Meeting'
+      ],
+      emails: 45,
+      reports: 8
+    }
+  }
+]
+
+const stakeholderFeedback: StakeholderFeedback[] = [
+  {
+    stakeholder: 'Product Owner',
+    role: 'Business Owner',
+    feedback: 'Platform meets all business requirements and is ready for launch. Minor UI improvements noted for future releases.',
+    rating: 5,
+    concerns: [
+      'Need to ensure adequate user training before launch',
+      'Monitor performance during peak traffic periods'
+    ],
+    approvalStatus: 'approved',
+    date: '2024-01-25'
+  },
+  {
+    stakeholder: 'Marketing Manager',
+    role: 'Business Stakeholder',
+    feedback: 'All marketing and promotional features are working correctly. Integration with CRM system confirmed.',
+    rating: 4,
+    concerns: [
+      'Need final review of promotional content',
+      'Analytics integration should be tested thoroughly'
+    ],
+    approvalStatus: 'approved',
+    date: '2024-01-24'
+  },
+  {
+    stakeholder: 'QA Lead',
+    role: 'Quality Assurance',
+    feedback: 'All critical and high-priority defects have been resolved. Performance meets requirements. Some minor usability enhancements recommended.',
+    rating: 4,
+    concerns: [
+      'User training materials need updating',
+      'Monitor error rates post-launch'
+    ],
+    approvalStatus: 'conditional',
+    date: '2024-01-25'
+  },
+  {
+    stakeholder: 'Tech Lead',
+    role: 'Technical Authority',
+    feedback: 'Technical architecture is sound and scalable. All integration points working correctly. Security requirements satisfied.',
+    rating: 5,
+    concerns: [
+      'Monitor system performance under load',
+      'Ensure backup and recovery procedures are in place'
+    ],
+    approvalStatus: 'approved',
+    date: '2024-01-25'
+  }
+]
+
+export function UATTesting() {
+  const [activeTab, setActiveTab] = useState<'sessions' | 'scenarios' | 'stakeholders'>('sessions')
+  const [selectedSession, setSelectedSession] = useState<UATSession | null>(null)
+
+  const handleTabChange = (value: string) => {
+    if (value === 'sessions' || value === 'scenarios' || value === 'stakeholders') {
+      setActiveTab(value)
+    }
+  }
+
+  const getStatusColor = (status: UATSession['status']) => {
+    switch (status) {
+      case 'completed': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+      case 'approved': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+      case 'in-progress': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+      case 'testing': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+      case 'planning': return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+      case 'rejected': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+    }
+  }
+
+  const getScenarioStatusColor = (status: any) => {
+    switch (status) {
+      case 'pass': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+      case 'fail': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+      case 'blocked': return 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400'
+      case 'not-tested': return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+    }
+  }
+
+  const getApprovalColor = (status: StakeholderFeedback['approvalStatus']) => {
+    switch (status) {
+      case 'approved': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+      case 'conditional': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
+      case 'pending': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+      case 'rejected': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+    }
+  }
+
+  return (
+    <section id="uat-testing" className="py-20 bg-background">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl font-bold mb-4">
+            <span className="gradient-text">User Acceptance Testing</span>
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Structured UAT planning, stakeholder management, and sign-off processes. 
+            Ensuring business requirements are met before production release.
+          </p>
+        </motion.div>
+
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+          <TabsList className="grid w-full max-w-md mx-auto grid-cols-3">
+            <TabsTrigger value="sessions" className="flex items-center space-x-2">
+              <Calendar className="h-4 w-4" />
+              <span>UAT Sessions</span>
+            </TabsTrigger>
+            <TabsTrigger value="scenarios" className="flex items-center space-x-2">
+              <FileText className="h-4 w-4" />
+              <span>Test Scenarios</span>
+            </TabsTrigger>
+            <TabsTrigger value="stakeholders" className="flex items-center space-x-2">
+              <Users className="h-4 w-4" />
+              <span>Stakeholders</span>
+            </TabsTrigger>
+          </TabsList>
+
+          {/* UAT Sessions Tab */}
+          <TabsContent value="sessions" className="mt-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {uatSessions.map((session, index) => (
+                <motion.div
+                  key={session.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg mb-2">{session.title}</CardTitle>
+                          <CardDescription className="text-sm">{session.description}</CardDescription>
+                        </div>
+                        <Badge className={getStatusColor(session.status)}>
+                          {session.status}
+                        </Badge>
+                      </div>
+                    </div>
+                    </CardHeader>
+                            <div>
+                              <h5 className="font-medium mb-1">Technical</h5>
+                              <div className="space-y-1">
+                                {session.participants.technical.map((participant, participantIndex) => (
+                                  <Badge key={participantIndex} variant="outline" className="text-xs">
+                                    {participant}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                            <div>
+                              <h5 className="font-medium mb-1">QA</h5>
+                              <div className="space-y-1">
+                                {session.participants.qa.map((participant, participantIndex) => (
+                                  <Badge key={participantIndex} variant="outline" className="text-xs">
+                                    {participant}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                            <div>
+                              <h5 className="font-medium mb-1">End Users</h5>
+                              <div className="space-y-1">
+                                {session.participants.endUsers.map((participant, participantIndex) => (
+                                  <Badge key={participantIndex} variant="outline" className="text-xs">
+                                    {participant}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Test Scenarios Summary */}
+                        <div>
+                          <h4 className="font-semibold mb-2">Test Scenarios</h4>
+                          <div className="space-y-2">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {session.testScenarios.slice(0, 4).map((scenario, scenarioIndex) => (
+                                <div key={scenario.id} className="p-3 border rounded">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="font-medium">{scenario.title}</span>
+                                    <Badge className={getScenarioStatusColor(scenario.status)}>
+                                      {scenario.status}
+                                    </Badge>
+                                  </div>
+                                  <span className="text-xs text-muted-foreground">{scenario.assignedTo}</span>
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                  {scenario.acceptanceCriteria.slice(0, 2).map((criteria, criteriaIndex) => (
+                                    <div key={criteriaIndex} className="flex items-start gap-1">
+                                      <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                      <span className="text-xs">{criteria}</span>
+                                    </div>
+                                  ))}
+                                  {scenario.acceptanceCriteria.length > 2 && (
+                                    <div className="text-xs text-muted-foreground">+{scenario.acceptanceCriteria.length - 2} more</div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                            {session.testScenarios.length > 4 && (
+                              <div className="text-center">
+                                <Button variant="outline" size="sm">
+                                  View All {session.testScenarios.length - 4} More Scenarios
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex gap-2 pt-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setSelectedSession(session)}
+                            className="flex-1"
+                          >
+                            <Eye className="h-4 w-4 mr-2" />
+                            View Details
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                          >
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Report
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </TabsContent>
+
+          {/* Test Scenarios Tab */}
+          <TabsContent value="scenarios" className="mt-8">
+            <div className="text-center py-8">
+              <div className="max-w-2xl mx-auto">
+                <FileText className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-2xl font-bold mb-4">Test Scenarios Details</h3>
+                <p className="text-muted-foreground mb-8">
+                  Comprehensive test scenario execution and tracking functionality coming soon.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                  <div className="p-6 border rounded-lg">
+                    <h4 className="font-semibold mb-2">Scenario Management</h4>
+                    <p className="text-sm text-muted-foreground">Detailed test case execution and results tracking</p>
+                  </div>
+                  <div className="p-6 border rounded-lg">
+                    <h4 className="font-semibold mb-2">Requirements Traceability</h4>
+                    <p className="text-sm text-muted-foreground">Business requirements mapping and coverage</p>
+                  </div>
+                  <div className="p-6 border rounded-lg">
+                    <h4 className="font-semibold mb-2">Execution Tracking</h4>
+                    <p className="text-sm text-muted-foreground">Real-time test progress monitoring</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Stakeholders Tab */}
+          <TabsContent value="stakeholders" className="mt-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {stakeholderFeedback.map((stakeholder, index) => (
+                <motion.div
+                  key={stakeholder.stakeholder}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Users className="h-5 w-5 text-primary" />
+                        {stakeholder.stakeholder}
+                      </CardTitle>
+                      <CardDescription>{stakeholder.role}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {/* Feedback */}
+                        <div>
+                          <h4 className="font-semibold mb-2">Feedback</h4>
+                          <p className="text-sm text-muted-foreground p-3 bg-muted rounded">
+                            {stakeholder.feedback}
+                          </p>
+                        </div>
+
+                        {/* Rating */}
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="font-semibold">Rating</h4>
+                            <div className="flex items-center gap-2">
+                              {[1, 2, 3, 4, 5].map((rating) => (
+                                <Star
+                                  key={rating}
+                                  className={`h-4 w-4 ${rating <= stakeholder.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                          <span className="text-sm text-muted-foreground">{stakeholder.date}</span>
+                        </div>
+
+                        {/* Approval Status */}
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="font-semibold">Approval Status</h4>
+                            <Badge className={getApprovalColor(stakeholder.approvalStatus)}>
+                              {stakeholder.approvalStatus}
+                            </Badge>
+                          </div>
+                        </div>
+
+                        {/* Concerns */}
+                        {stakeholder.concerns.length > 0 && (
+                          <div>
+                            <h4 className="font-semibold mb-2">Concerns</h4>
+                            <div className="space-y-2">
+                              {stakeholder.concerns.map((concern, concernIndex) => (
+                                <div key={concernIndex} className="flex items-start gap-2 p-2 bg-orange-50 dark:bg-orange-900/20 rounded">
+                                  <AlertTriangle className="h-4 w-4 text-orange-600 mt-0.5 flex-shrink-0" />
+                                  <span className="text-sm">{concern}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex gap-2 pt-2">
+                          <Button size="sm" variant="outline" className="flex-1">
+                            <MessageSquare className="h-4 w-4 mr-2" />
+                            Send Message
+                          </Button>
+                          <Button size="sm" variant="outline">
+                            <Phone className="h-4 w-4 mr-2" />
+                            Schedule Call
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </section>
+  )
+}
