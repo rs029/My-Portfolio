@@ -11,21 +11,21 @@ const contactMethods = [
   {
     icon: Mail,
     label: "Email",
-    value: "qa.analyst@portfolio.com",
-    href: "mailto:qa.analyst@portfolio.com",
+    value: "rs029singh@gmail.com",
+    href: "mailto:rs029singh@gmail.com",
     description: "For project inquiries and collaborations"
   },
   {
     icon: Phone,
     label: "Phone",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
+    value: "+91 6307871647",
+    href: "tel:+916307871647",
     description: "Available for urgent testing consultations"
   },
   {
     icon: MapPin,
     label: "Location",
-    value: "San Francisco, CA",
+    value: "Noida, UP",
     href: null,
     description: "Open to remote and hybrid opportunities"
   }
@@ -35,30 +35,32 @@ const socialLinks = [
   {
     icon: Github,
     label: "GitHub",
-    href: "https://github.com/username",
+    href: "https://github.com/rs029",
     description: "Open source contributions and test automation scripts"
   },
   {
     icon: Linkedin,
     label: "LinkedIn",
-    href: "https://linkedin.com/in/username",
+    href: "www.linkedin.com/in/rishu-singh-a78b40a6",
     description: "Professional network and QA insights"
-  },
-  {
-    icon: Twitter,
-    label: "Twitter",
-    href: "https://twitter.com/username",
-    description: "QA tips and industry updates"
   }
+  // {
+  //   icon: Twitter,
+  //   label: "Twitter",
+  //   href: "https://twitter.com/username",
+  //   description: "QA tips and industry updates"
+  // }
 ]
 
 const expertiseAreas = [
+  "Manual Testing",
   "Test Automation",
   "API Testing",
   "Performance Testing",
   "Security Testing",
   "Mobile Testing",
-  "CI/CD Integration"
+  "CI/CD Integration",
+  "Regression Testing"
 ]
 
 export function Contact() {
@@ -105,17 +107,36 @@ export function Contact() {
     
     setFormStatus("loading")
     
-    // Simulate form submission
-    setTimeout(() => {
-      // Simulate success (90% success rate for demo)
-      if (Math.random() > 0.1) {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      })
+      
+      const data = await response.json()
+      
+      if (response.ok) {
         setFormStatus("success")
         setFormData({ name: "", email: "", company: "", projectType: "", message: "" })
         setErrors({})
       } else {
         setFormStatus("error")
+        // Show server validation errors if any
+        if (data.details) {
+          const serverErrors: Record<string, string> = {}
+          data.details.forEach((err: any) => {
+            serverErrors[err.field] = err.message
+          })
+          setErrors(serverErrors)
+        }
       }
-    }, 2000)
+    } catch (error) {
+      console.error('Form submission error:', error)
+      setFormStatus("error")
+    }
   }
 
   const handleInputChange = (field: string, value: string) => {

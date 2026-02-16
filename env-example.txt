@@ -1,0 +1,10 @@
+# Copy this file to .env.local and fill in your actual values
+
+# Resend API Key - Get this from https://resend.com/api-keys
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Contact Email - Email where contact form submissions should be sent
+CONTACT_EMAIL=your-email@example.com
+
+# Next.js Configuration
+NEXT_PUBLIC_APP_URL=http://localhost:3000

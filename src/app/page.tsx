@@ -56,23 +56,23 @@ export default function Home() {
             <TabsContent value="all" className="space-y-12 mt-8">
               <Skills />
               <Projects />
-              <QADemo />
+              {/* <QADemo /> */}
               <Automation />
               {/* <TestDocumentation /> */}
               {/* <TestStrategy />
               <BugManagement />
               <ExploratoryTesting /> */}
               {/* <UATTesting /> */}
-              <MobileTesting />
-              <Metrics />
+              {/* <MobileTesting /> */}
+              {/* <Metrics /> */}
             </TabsContent>
 
             {/* Manual Testing View */}
             <TabsContent value="manual" className="space-y-12 mt-8">
-              <TestDocumentation />
+              {/* <TestDocumentation />
               <TestStrategy />
               <BugManagement />
-              <ExploratoryTesting />
+              <ExploratoryTesting /> */}
               {/* <UATTesting /> */}
               {/* <MobileTesting /> */}
             </TabsContent>
